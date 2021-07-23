@@ -56,9 +56,6 @@ const App = (props) => {
       <nav className="navbar navbar-expand navbar-dark bg-dark">
 				<div className="container-fluid">
           <Link to="/courses" className="navbar-brand">課程心得</Link>
-          
-          <Search courses={courses}/>
-
           <div className="navbar-nav me-auto">
             <li className="nav-item">
               <Link to="/courses" className="nav-link">所有課程</Link>	
@@ -93,6 +90,8 @@ const App = (props) => {
         
 			</nav>
       
+      <Search courses={courses}/>
+
       <div className="container mt-3">
         <Switch>
           <Route 

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 class ReviewService {
   http = axios.create({
-    baseURL: `/api/reviews`,
+    baseURL: `http://localhost:5000/api/reviews`,
     headers: {
       "Content-type": "application/json"
     }

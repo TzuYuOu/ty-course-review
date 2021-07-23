@@ -26,42 +26,40 @@ const Search = ({courses}) => {
   }
 
   return (
-    <div className="navbar-nav mr-auto">
+    <div className="container mt-3"> 
       
-        
-      <input 
-          
-          type="search"
-          id="header-search"
-          placeholder="Search course"
-          name="s" 
-          value={text}
-          onChange={(e) => updateInput(e.target.value)}
+      <input
+        className="col-4 offset-4"
+        type="search"
+        id="header-search"
+        placeholder="搜尋課程名稱"
+        name="search" 
+        value={text}
+        onChange={(e) => updateInput(e.target.value)}
       />
         
+      <ul className="col-4 list-group offset-4">
+      {
+        coursesFiltered.length > 0 && text ? (
+          coursesFiltered.map((course, index) => {
+            return (
+              <li className="search-item list-group-item"  onClick={() => courseClick(course._id)} key={index}>
+                {course.courseId} {course.name}
+              </li>
+            )
+          })
+        ) :  (
+          <div className="text-center">
+            {
+              text && <p>無關鍵字</p>
+            }
+          </div>
+        )
+        
+      }
+      </ul>
+        
       
-      <div>
-        <ul className="text-warning">
-        {
-          coursesFiltered.length > 0 && text ? (
-            coursesFiltered.map((course, index) => {
-              return (
-                <li onClick={() => courseClick(course._id)} key={index}>
-                  {course.name}
-                </li>
-              )
-            })
-          ) :  (
-            <div>
-              {
-                text ? <div className="text-white">無關鍵字</div> : null
-              }
-            </div>
-          )
-          
-        }
-        </ul>
-      </div>
       
     </div>
     

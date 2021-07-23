@@ -36,10 +36,10 @@ const Course = (props) =>  {
 							error ?
 							<span>{error}</span>
 							:
-							<div>
-								<h4>{course.name}</h4>
+							<div className="mt-3">
+								<h4>{course.courseId} {course.name}</h4>
 								<Link to={`/courses/${props.match.params.id}/review`} className="btn btn-success">新增心得</Link>
-								<h5>課程心得</h5>
+								<h5 className="mt-3">課程心得</h5>
 								{
 									course.reviews.length > 0 ? 
 									(
