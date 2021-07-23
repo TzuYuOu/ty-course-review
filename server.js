@@ -22,7 +22,7 @@ const DB_URL = process.env.DB_URL;
 const port = process.env.PORT || 5000;
 
 // routes
-app.use('/courses', courseRoute);
+app.use('/api/courses', courseRoute);
 app.use('/reviews', reviewRoute);
 app.use('/auth',authRoute);
 
