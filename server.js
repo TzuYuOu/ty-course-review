@@ -23,8 +23,8 @@ const port = process.env.PORT || 5000;
 
 // routes
 app.use('/api/courses', courseRoute);
-app.use('/reviews', reviewRoute);
-app.use('/auth',authRoute);
+app.use('/api/reviews', reviewRoute);
+app.use('/api/auth',authRoute);
 
 if(process.env.NODE_ENV === "production"){
     app.use(express.static(path.join(__dirname,'/frontend/build')));
