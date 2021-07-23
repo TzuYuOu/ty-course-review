@@ -7,7 +7,6 @@ import AddReview from './components/add-review';
 import Course from './components/course';
 import Login from './components/login';
 import Register from './components/register';
-import Search from './components/search';
 import Profile from './components/Profile';
 import MyReview from './components/MyReview';
 import ForgotPassword from './components/ForgotPassword';
@@ -90,7 +89,7 @@ const App = (props) => {
         
 			</nav>
       
-      <Search courses={courses}/>
+      {/* <button className="btn btn-success float-end mx-3 mt-3">新增心得</button> */}
 
       <div className="container mt-3">
         <Switch>

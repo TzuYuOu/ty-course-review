@@ -70,16 +70,16 @@ const AddReview = (props) => {
 								name="text" 
 								id="text" 
 								cols="30" 
-								rows="10" 
+								rows="5" 
 								required 
-								className="form-control" 
+								className="form-control mt-3" 
 								value={review}
 								placeholder="上課形式、課堂要求、學習內容"
 								onChange={handleInputChange} />
 							
 						</div>
-						<button onClick={saveReview} className="btn btn-success">
-							Submit
+						<button onClick={saveReview} className="btn btn-success mt-3 float-end">
+							送出
 						</button>
 					</div>
 				}

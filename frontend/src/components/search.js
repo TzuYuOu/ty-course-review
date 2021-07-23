@@ -27,37 +27,38 @@ const Search = ({courses}) => {
 
   return (
     <div className="container mt-3"> 
-      
-      <input
-        className="col-4 offset-4"
-        type="search"
-        id="header-search"
-        placeholder="搜尋課程名稱"
-        name="search" 
-        value={text}
-        onChange={(e) => updateInput(e.target.value)}
-      />
+      <div className="col-md-4 offset-md-4">
+        <input
+          className=""
+          type="search"
+          id="header-search"
+          placeholder="搜尋課程名稱"
+          name="search" 
+          value={text}
+          onChange={(e) => updateInput(e.target.value)}
+        />
         
-      <ul className="col-4 list-group offset-4">
-      {
-        coursesFiltered.length > 0 && text ? (
-          coursesFiltered.map((course, index) => {
-            return (
-              <li className="search-item list-group-item"  onClick={() => courseClick(course._id)} key={index}>
-                {course.courseId} {course.name}
-              </li>
-            )
-          })
-        ) :  (
-          <div className="text-center">
-            {
-              text && <p>無關鍵字</p>
-            }
-          </div>
-        )
-        
-      }
-      </ul>
+        <ul className="list-group mt-1 ">
+        {
+          coursesFiltered.length > 0 && text ? (
+            coursesFiltered.map((course, index) => {
+              return (
+                <li className="search-item list-group-item"  onClick={() => courseClick(course._id)} key={index}>
+                  {course.courseId} {course.name}
+                </li>
+              )
+            })
+          ) :  (
+            <div className="px-2">
+              {
+                text && <p>無關鍵字</p>
+              }
+            </div>
+          )
+          
+        }
+        </ul>
+      </div>
         
       
       

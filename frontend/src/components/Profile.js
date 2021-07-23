@@ -22,7 +22,13 @@ const Profile = (props) => {
       {
         isLoading 
         ?  <div>Loading ...</div>
-        : <div>{userInfo.name}</div>
+        : <div className="card">
+            <div className="card-body">
+              <h5 className="card-title">{userInfo.name}</h5>
+              <span className="card-text">{userInfo.email}</span>
+            </div>
+            
+          </div>
       }
       
     </div>
