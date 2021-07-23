@@ -3,6 +3,7 @@
 
 ## App first look
 ### User Interface
+<img src="https://https://github.com/TzuYuOu/ty-course-review/demo/user_interface.png" alt="drawing" width="80%"/>
 
 
 ## About Course Review
