@@ -40,6 +40,7 @@ const Course = (props) =>  {
 								<h4>{course.courseId} {course.name}</h4>
 								<Link to={`/courses/${props.match.params.id}/review`} className="btn btn-success">新增心得</Link>
 								<h5 className="mt-3">課程心得</h5>
+								<ul className="list-group">
 								{
 									course.reviews.length > 0 ? 
 									(
@@ -57,6 +58,7 @@ const Course = (props) =>  {
 										<p>尚未有心得</p>
 									</div>
 								}
+								</ul>
 							</div>
 						}
 					</div>

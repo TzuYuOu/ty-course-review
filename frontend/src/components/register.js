@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthService from "../services/auth-service";
+import validator from 'validator';
 
 const Register = () => {
 
@@ -23,6 +24,10 @@ const Register = () => {
 
   const handleRegister = (e) =>{
     e.preventDefault();
+
+    if(!validator.isEmail(userInfo.email)){
+      return setError("Enter valid email")
+    }
 
     if(userInfo.password !== userInfo.confirmPassword){
       setUserInfo({

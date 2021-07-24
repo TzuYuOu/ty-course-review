@@ -56,11 +56,11 @@ const AddReview = (props) => {
 	
 	return ( 
 		<div>	
-			<div className="submit-form">
+			<div>
 				{ submitted ? 
-					<div>
-						<h4>You submitted successfully</h4>
-						<Link to={`/courses/${props.match.params.id}`} className="btn btn-success">Back to Courses</Link>
+					<div className="text-center mt-3">
+						<h4>送出成功</h4>
+						<Link to={`/courses/${props.match.params.id}`} className="btn btn-success">回到課程</Link>
 					</div>
 					: 
 					<div>
