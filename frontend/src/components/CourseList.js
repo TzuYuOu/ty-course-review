@@ -1,5 +1,5 @@
 import { useHistory } from 'react-router-dom';
-import Search from './Search';
+import Search from './search';
 import NewReview from './NewReview';
 const CourseList = ({courses}) => {
 
