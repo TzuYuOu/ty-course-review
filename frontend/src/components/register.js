@@ -62,7 +62,7 @@ const Register = () => {
     <div className="container">
       <div className="row">
         <div className="col-md-4 offset-md-4">
-          <div className="bg-light mt-4 p-4">
+          <div className="bg-white mt-4 p-4">
             <form onSubmit={handleRegister}  className="row g-3">
               <h4>歡迎加入我們</h4>
               { error && <span className="text-danger">{error}</span>}

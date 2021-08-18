@@ -15,8 +15,8 @@ const getSingleReview = async (req, res) => {
 const postReview = async (req, res) => {
 
   const review = new Review({
-    user:  new mongoose.Types.ObjectId(req.body.userId),
-    course: new mongoose.Types.ObjectId(req.body.courseId),
+    user:  mongoose.Types.ObjectId(req.user.id),
+    course: mongoose.Types.ObjectId(req.body.courseId),
     review: req.body.review
   });
   try{

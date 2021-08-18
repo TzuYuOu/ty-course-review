@@ -14,9 +14,9 @@ ul {
 }
 
 .add-review-btn{
-  background-color: aquamarine;
-  left: 75%;
-  top: 80%;
+  background-color: rgb(38, 170, 126);
+  color: white;
+  
   
 }
 
@@ -28,11 +28,10 @@ ul {
 .filtered-list {
   z-index: 1;
   position: absolute;
-}
-
-.filtered-item{
   background-color: white;
 }
+
+
 
 .filtered-item:hover {
   background-color: rgb(236, 234, 234)
@@ -42,4 +41,9 @@ ul {
   border-style: none;
   background-color: rgb(236, 234, 234);
   width: 100%;
+}
+
+.course-item:hover{
+  cursor: pointer;
+  background-color: rgb(207, 204, 204)
 }

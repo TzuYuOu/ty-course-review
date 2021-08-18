@@ -67,7 +67,13 @@ const forgotPassword = async (req, res, next) => {
     await user.save();
 
     // Create reset url to email to provided email
-    const resetUrl = `http://localhost:3000/passwordreset/${resetToken}`;
+    let resetUrl;
+    if(process.env.NODE_ENV === "development"){
+      resetUrl = `http://localhost:3000/passwordreset/${resetToken}`;
+    }
+    else{
+      resetUrl = `https://ty-course-review.herokuapp.com/passwordreset/${resetToken}`;
+    }
 
     // HTML Message
     const message = `

@@ -1,18 +1,33 @@
 import React, { useState } from 'react';
 import { Modal } from 'react-bootstrap';
+import authService from '../services/auth-service';
+import { Link } from 'react-router-dom';
+import reviewService from '../services/review-service';
 
 const NewReview = ({courses}) => {
   
   const [ show, setShow ] = useState(false);
+  const [ loginShow, setLoginShow] = useState(false);
   const [ coursesFiltered, setCoursesFiltered ] = useState([]);
   const [ courseInput, setCourseInput] = useState("");
+  const [ selectedCourse, setSelectedCourse] = useState(undefined);
+  const [ review, setReview] = useState("");
 
   const addReview = () => {
-    setShow(true);
+    if(authService.isLogin()){
+      setShow(true);
+    }
+    else{
+      setLoginShow(true);
+    }    
   }
 
   const handleClose = () => {
     setShow(false);
+  }
+
+  const handleLoginClose = () => {
+    setLoginShow(false);
   }
 
   const updateCourseInput = (courseInput) => {
@@ -22,17 +37,35 @@ const NewReview = ({courses}) => {
     
     setCourseInput(courseInput);
     setCoursesFiltered(filtered);
+    setSelectedCourse(undefined);
   }
 
-  const courseClick = (name) => {
-    setCourseInput(name);
+  const courseClick = (course) => {
+    setCourseInput(course.name);
+    setSelectedCourse(course._id);
     setCoursesFiltered([]);
+  }
 
+  const postReview = () => {
+
+    let data = {
+      courseId: selectedCourse,
+      review: review
+    }
+
+    reviewService.createReivew(data)
+      .then(res => {
+        alert("成功送出心得");
+        setShow(false);
+      })
+      .catch(err => {
+        console.log(err);
+      })
   }
 
   return (
     <div>
-      <button onClick={addReview} className="add-review-btn">新增心得</button> 
+      <button onClick={addReview} className="btn add-review-btn mt-3">新增心得</button> 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header className="modal-header">
           <span>提供心得</span>
@@ -46,7 +79,7 @@ const NewReview = ({courses}) => {
               {
                 coursesFiltered.map((course, index) => {
                   return (
-                    <li onClick={() => courseClick(course.name)} className="filtered-item" key={index}>
+                    <li onClick={() => courseClick(course)} className="filtered-item" key={index}>
                       {course.name}
                     </li>
                   )
@@ -55,10 +88,22 @@ const NewReview = ({courses}) => {
             </ul>
             
           }
-          <textarea className="review-area" name="review" id="" cols="30" rows="10" placeholder="上課形式、課堂收穫、學習內容..."></textarea>
+          <textarea value={review} onChange={(e) => setReview(e.target.value)} className="review-area" name="review" id="" cols="30" rows="10" placeholder="上課形式、課堂收穫、學習內容..."></textarea>
         </Modal.Body>
         <Modal.Footer>
-          <button>送出心得</button>
+          <button onClick={postReview} disabled={ selectedCourse === undefined || review === ""}>送出心得</button>
+        </Modal.Footer>
+      </Modal>
+      <Modal show={loginShow} onHide={handleLoginClose}>
+        <Modal.Header className="modal-header">
+          <h3>請先登入</h3>
+        </Modal.Header>
+        <Modal.Body >
+          <span>本功能僅限登入後使用，請註冊或登入現有帳號後繼續。</span>
+        </Modal.Body>
+        <Modal.Footer>
+          <button className="btn btn-secondary" onClick={handleLoginClose}>返回頁面</button>
+          <Link className="btn btn-primary" to="/login">登入帳號</Link>
         </Modal.Footer>
       </Modal>
     </div>

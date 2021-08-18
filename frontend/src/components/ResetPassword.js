@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import authService from '../services/auth-service';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 const ResetPassword = (props) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const history = useHistory();
 
   const forgotPasswordHandler = async (e) => {
     e.preventDefault();
@@ -19,8 +20,9 @@ const ResetPassword = (props) => {
 
     authService.resetPassword(props.match.params.resetToken, { password })
       .then(res => {
-        // alert (`Updated password successfully!`);
-        setSuccess('Updated password successfully!');
+        alert (`密碼更新成功!`);
+        setSuccess('密碼更新成功');
+        history.push('/login');
       })
       .catch(err => {
         console.log(err);

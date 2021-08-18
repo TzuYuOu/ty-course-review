@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import courseService from '../services/course-service';
 
 const Course = (props) =>  {
@@ -38,7 +37,7 @@ const Course = (props) =>  {
 							:
 							<div className="mt-3">
 								<h4>{course.courseId} {course.name}</h4>
-								<Link to={`/courses/${props.match.params.id}/review`} className="btn btn-success">新增心得</Link>
+								{/* <Link to={`/courses/${props.match.params.id}/review`} className="btn btn-success">新增心得</Link> */}
 								<h5 className="mt-3">課程心得</h5>
 								<ul className="list-group">
 								{
@@ -47,7 +46,7 @@ const Course = (props) =>  {
 										course.reviews.map((review, index) => {
 											return(
 												
-												<li className="list-group-item" key={index}>
+												<li className="list-group-item mt-2" key={index}>
 													<p>{review.review}</p>
 												</li>
 											)

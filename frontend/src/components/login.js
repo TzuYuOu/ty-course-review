@@ -29,7 +29,7 @@ const Login = (props) => {
       .then(res => {
         alert('Login successfully')
         localStorage.setItem('token', res.data.token);
-        props.history.push('/courses')
+        props.history.push('/')
         window.location.reload()
       })
       .catch(err => {
@@ -43,7 +43,7 @@ const Login = (props) => {
     
     <div className="row">
       <div className="col col-md-6 offset-md-3">
-        <div className="bg-light mt-4 p-4">
+        <div className="bg-white mt-4 p-4">
           <form action="" className="row g-3">
             <h4>歡迎回來</h4>
             <div className="col-12">

@@ -29,16 +29,16 @@ const Search = ({courses}) => {
     <div className="container mt-3"> 
       <div className="col-md-4 offset-md-4">
         <input
-          className=""
+          className="row"
           type="search"
           id="header-search"
-          placeholder="搜尋課程名稱"
+          placeholder="搜尋課程"
           name="search" 
           value={text}
           onChange={(e) => updateInput(e.target.value)}
         />
         
-        <ul className="filtered-list mt-1 ">
+        <ul className="filtered-list mt-1">
         {
           coursesFiltered.length > 0 && text ? (
             coursesFiltered.map((course, index) => {

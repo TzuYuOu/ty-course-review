@@ -2,14 +2,13 @@ import React, { useEffect,  useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import CoursesList from './components/course-list';
-import AddReview from './components/add-review';
-import Course from './components/course';
+import CoursesList from './components/CourseList';
+import AddReview from './components/AddReview';
+import Course from './components/Course';
 import Login from './components/Login';
-import Register from './components/register';
+import Register from './components/Register';
 import Profile from './components/Profile';
 import MyReview from './components/MyReview';
-import NewReview from './components/NewReview';
 import Nav from './components/Nav';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
@@ -46,7 +45,6 @@ const App = (props) => {
     <div>
       
       <Nav/>
-      <NewReview courses={courses}/>
       <div className="container mt-3">
         <Switch>
           <Route 

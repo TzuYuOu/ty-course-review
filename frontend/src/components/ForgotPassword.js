@@ -13,12 +13,12 @@ const ForgotPassword = () => {
     try{
       const { data } = await authService.forgotPassword({email})
       console.log(data)  
-      setSuccess("Go to check your email box");
+      setSuccess("請到信箱檢查連結並修改密碼");
     }
     catch(err){
       console.log(err);
       setEmail("");
-      setError("Wrong email");
+      setError("信箱錯誤");
     }
   }
 
@@ -27,7 +27,7 @@ const ForgotPassword = () => {
     <div className="container">
       <div className="row">
         <h3 className="text-center">忘記密碼</h3>
-        <div className="col-md-4 offset-md-4 bg-light mt-4 p-4">
+        <div className="col-md-4 offset-md-4 bg-white mt-4 p-4">
           <form onSubmit={forgotPasswordHandler} className="row g-3"> 
             <h5 className="text-center">重新設定密碼</h5>
             {success && <span className="text-success">{success}</span>}
