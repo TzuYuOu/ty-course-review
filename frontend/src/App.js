@@ -1,29 +1,27 @@
 import React, { useEffect,  useState } from 'react';
-import { Route, Switch, Link } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import CoursesList from './components/course-list';
 import AddReview from './components/add-review';
 import Course from './components/course';
-import Login from './components/login';
+import Login from './components/Login';
 import Register from './components/register';
 import Profile from './components/Profile';
 import MyReview from './components/MyReview';
+import NewReview from './components/NewReview';
+import Nav from './components/Nav';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 import NotFound from './components/NotFound';
 import CourseService from './services/course-service';
-import AuthService from './services/auth-service';
 import AuthenticatedRoute from './components/AuthenticatedRoute';
 import UnAuthenticatedRoute from './components/UnAuthenticatedRoute';
 
-
 const App = (props) => {
 
-  const [ user, setUser] = useState(undefined);
-  const [ courses, setCourses] = useState([]);
-  const [ isAuthenticated, setIsAuthenticated] = useState(false);
-  
+  const [ courses, setCourses] = useState([]); 
+
   // get all courses from db
   const retrieveCourses = () =>{
     CourseService.getAllCourses()
@@ -39,12 +37,6 @@ const App = (props) => {
 
   useEffect( () => {
 
-    const user = AuthService.getCurrentUser();
-    if(user && user.token){
-      setUser(user);
-      setIsAuthenticated(true);
-    }
-
     retrieveCourses();
 
 	}, []);
@@ -52,49 +44,13 @@ const App = (props) => {
 
   return ( 
     <div>
-      <nav className="navbar navbar-expand navbar-dark bg-dark">
-				<div className="container-fluid">
-          <Link to="/courses" className="navbar-brand">課程心得</Link>
-          <div className="navbar-nav me-auto">
-            <li className="nav-item">
-              <Link to="/courses" className="nav-link">所有課程</Link>	
-            </li>
-            <li className="nav-item">
-              { isAuthenticated && <Link to="/myreview" className="nav-link">我的心得</Link> }
-            </li>
-            <li className="nav-item">
-              { isAuthenticated && <Link to="/profile" className="nav-link">我的帳戶</Link> }
-            </li>
-            <li className="nav-item">
-              {
-                user ? 
-                  <a href="/" onClick={AuthService.logout} className="nav-link">{user.name} 登出</a>
-                :
-                  <Link to="/login" className="nav-link">登入</Link>
-              }
-              
-            </li>
-            <li className="nav-item">
-              {
-                !isAuthenticated && 
-                  <Link to="/register" className="nav-link">註冊</Link>
-              }
-            </li>
-
-            
-            
-            
-          </div>
-        </div>
-        
-			</nav>
       
-      {/* <button className="btn btn-success float-end mx-3 mt-3">新增心得</button> */}
-
+      <Nav/>
+      <NewReview courses={courses}/>
       <div className="container mt-3">
         <Switch>
           <Route 
-            exact path={["/", "/courses"]} 
+            exact path={["/"]} 
             render={(props) => {
               return (
                 <CoursesList {...props} courses={courses}/>
@@ -111,44 +67,41 @@ const App = (props) => {
           <UnAuthenticatedRoute 
             path='/login' 
             component={Login}
-            appProps={{isAuthenticated}}
+            restricted={true}
           />
           <UnAuthenticatedRoute
             path='/register'
             component={Register}
-            appProps={{isAuthenticated}}
+            restricted={true}
           />
           <UnAuthenticatedRoute
             path='/forgotPassword'
             component={ForgotPassword}
-            appProps={{isAuthenticated}}
+            restricted={true}
           />
           <UnAuthenticatedRoute
             path='/passwordReset/:resetToken'
             component={ResetPassword}
-            appProps={{isAuthenticated}}
+            restricted={true}
           />
 
           <AuthenticatedRoute 
             exact path='/courses/:id/review'
-            component={AddReview}
-            appProps={{isAuthenticated}}
+            component={AddReview} 
           />
           <AuthenticatedRoute 
             path='/profile'
             component={Profile}
-            appProps={{isAuthenticated}}
           />
           <AuthenticatedRoute 
             path='/myreview'
             component={MyReview}
-            appProps={{isAuthenticated}}
           />
           <Route component={NotFound} />
 
         </Switch>
       </div>
-        
+      
     </div>
   );
 }

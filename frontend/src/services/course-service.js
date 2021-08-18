@@ -3,7 +3,7 @@ import axios from 'axios';
 class CourseService {
 
   http = axios.create({
-    baseURL: `/api/courses`,
+    baseURL: `http://localhost:5000/api/courses`,
     headers: {
       "Content-type": "application/json"
     }

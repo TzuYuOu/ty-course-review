@@ -1,13 +1,15 @@
 import { Redirect, Route } from 'react-router-dom';
+import authService from '../services/auth-service';
 
-const UnAuthenticatedRoute = ({ component: C, appProps, ...rest }) => {
+const UnAuthenticatedRoute = ({ component: C, appProps, restricted, ...rest }) => {
   return (
     <Route
       {...rest}
       render={props =>
-        !appProps.isAuthenticated
-          ? <C {...props} {...appProps} />
-          : <Redirect to="/" />}
+        authService.isLogin() && restricted
+          ? <Redirect to="/" />
+          : <C {...props} {...appProps} />
+        }
     />
   )
 }

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 class AuthService {
   http = axios.create({
-    baseURL: `/api/auth`,
+    baseURL: `http://localhost:5000/api/auth`,
     headers: {
       "Content-type": "application/json"
     }
@@ -15,19 +15,9 @@ class AuthService {
   login(data){
     return this.http.post('/login', data);
   }
-
-  getCurrentUser(){
-    return JSON.parse(localStorage.getItem("user"));
-  }
  
-  logout(){
-    localStorage.removeItem("user");
-  }
-
   getProfile(){
-    const user = JSON.parse(localStorage.getItem("user"));
-    return this.http.get('/profile', { headers: {'x-auth-token': user.token}});
-    
+    return this.http.get('/profile', { headers: { Authorization: `Bearer ${localStorage.getItem("token")}`}});
   }
 
   forgotPassword(data){
@@ -37,6 +27,17 @@ class AuthService {
   resetPassword(token, data){
     return this.http.put(`/passwordReset/${token}`, data);
 
+  }
+
+  isLogin(){
+    if(localStorage.getItem("token")){
+      return true;
+    }
+    return false;
+  }
+
+  logout(){
+    localStorage.removeItem("token");
   }
   
 }

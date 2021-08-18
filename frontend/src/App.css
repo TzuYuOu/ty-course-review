@@ -1,3 +1,8 @@
+
+body, .review-modal{
+  background-color: rgb(236, 234, 234);
+}
+
 ul {
   list-style-type: none;
 }
@@ -6,4 +11,35 @@ ul {
   background-color: grey;
   cursor: pointer;
   
+}
+
+.add-review-btn{
+  background-color: aquamarine;
+  left: 75%;
+  top: 80%;
+  
+}
+
+.modal-header {
+  background-color: rgb(53, 50, 50);
+  color: rgb(236, 234, 234)
+}
+
+.filtered-list {
+  z-index: 1;
+  position: absolute;
+}
+
+.filtered-item{
+  background-color: white;
+}
+
+.filtered-item:hover {
+  background-color: rgb(236, 234, 234)
+}
+
+.review-area{
+  border-style: none;
+  background-color: rgb(236, 234, 234);
+  width: 100%;
 }

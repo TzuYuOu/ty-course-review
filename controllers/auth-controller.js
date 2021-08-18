@@ -1,114 +1,55 @@
 const User = require('../models/user');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
-const crypto = require("crypto");
-const sendEmail = require("../utils/sendEmail");
+const sendEmail = require('../utils/sendEmail');
+const crypto = require('crypto');
 
-dotenv.config();
+const register = async (req, res, next) => {
+  const { name, email, password } = req.body;
 
-const registerUser = (req, res) => {
+  try{
+    const user = await User.create({
+      name,
+      email,
+      password
+    });
 
-  const { name, email, password} = req.body;
-
-  // Basic validation
-  if(!name || !email || !password){
-    return res.status(400).json({success: false, message: 'Please enter all fields'}); 
+    res.status(200).json({success: true});
   }
-
-  // Check for existing user
-  User.findOne({email})
-    .then(user =>{
-      if(user) return res.status(400).json({success: false, message: 'This email has already existed'});
-    
-      const newUser = new User({
-        name,
-        email,
-        password
-      });
-
-      // Create salt & hash
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(newUser.password, salt, (err, hash) => {
-          if(err) throw err;
-
-          newUser.password = hash;
-          newUser.save()
-            .then(user => {
-
-              jwt.sign(
-                {id : user.id},
-                process.env.jwtSecret,
-                {expiresIn: 24*3600 },
-                (err, token) =>{
-                  if(err) throw err;
-                  res.json({
-                    token: token,
-                    name: user.name,
-                    userId: user._id
-                    
-                  })
-                }
-              )
-
-              
-            })
-        })
-      })
-    })
-  
-
-
+  catch(err){
+    next(err);
+  }
 }
 
-const loginUser = (req, res) => {
-  const { email, password} = req.body;
+const login = async (req, res, next) => {
+  const { email, password } = req.body;
 
-  // Basic validation
+  // Check if email and password is provided
   if(!email || !password){
-    return res.status(400).json({success: false, message: 'Please enter all fields'}); 
+    return res.status(400).json({message: "Please provide an email and password!"})
   }
 
-  User.findOne({email})
-    .then(user =>{
-      if(!user) return res.status(400).json({success: false, message: 'User does not exist'});
-    
-      // Validate password
-      bcrypt.compare(password, user.password)
-        .then(isMatch => {
-          if(!isMatch) return res.status(400).json({success: false, message: 'Incorrect password'});
-        
-          jwt.sign(
-            {id : user.id},
-            process.env.jwtSecret,
-            {expiresIn: 24*3600 },
-            (err, token) =>{
-              if(err) throw err;
-              res.json({
-                token: token,
-                name: user.name,
-                userId: user._id
-                
-              })
-            }
-          )
-          
-        })
-      
+  try{
+    // Check that user exists by email
+    const user = await User.findOne({ email }).select("+password");
 
-      
-              
-           
-    })
-  
-}
+    if(!user){
+      return res.status(401).json({message: "Invalid credentials!"})
+    }
 
-const getProfile = (req, res) => {
-  User.findById(req.user.id)
-    .select('-password')
-    .then(user => res.json(user))
-    
-    
+    // Check that password match
+    const isMatch = await user.matchPassword(password);
+
+    if(!isMatch){
+      return res.status(401).json({message: "Invalid credentials!"})
+    }
+
+    const token = user.getSignedJwtToken();
+    const userId = user.id
+    res.status(200).json({success: true, token, userId});
+
+  }
+  catch(err){
+    next(err);
+  }
 }
 
 const forgotPassword = async (req, res, next) => {
@@ -117,7 +58,7 @@ const forgotPassword = async (req, res, next) => {
   try{
     const user = await User.findOne({email});
     if(!user){
-      return res.status(404).json({error: "User not found"});
+      return res.status(404).json({success: false, message: "No email could not be sent"});
     }
 
     // Reset Token Gen and add to database hashed (private) version of token
@@ -125,29 +66,32 @@ const forgotPassword = async (req, res, next) => {
 
     await user.save();
 
-    const resetUrl = `http://localhost:3000/passwordReset/${resetToken}`;
+    // Create reset url to email to provided email
+    const resetUrl = `http://localhost:3000/passwordreset/${resetToken}`;
 
+    // HTML Message
     const message = `
-      <h1>重新設定密碼</h1>
-      <p>請使用以下網址發起PUT Request更新密碼</p>
+      <h1>You have requested a password reset</h1>
+      <p>Please make a put request to the following link:</p>
       <a href=${resetUrl} clicktracking=off>${resetUrl}</a>
-    `
+    `;
 
-    try{
+    try {
       sendEmail({
         to: user.email,
-        subject: "重新設定密碼",
-        text: message
-      })
-      res.status(200).json({ success: true, data: "Email Sent"});
-    }
-    catch(err){
+        subject: "Password Reset Request",
+        text: message,
+      });
+
+      res.status(200).json({ success: true, message: "Email Sent" });
+    } catch (err) {
       console.log(err);
       user.resetPasswordToken = undefined;
       user.resetPasswordExpire = undefined;
 
       await user.save();
-      return res.status(500).json({ error: "Email could not be sent"});
+
+      res.status(500).json({ success: false, message: "Email could not be sent" });
     }
 
   }
@@ -156,43 +100,55 @@ const forgotPassword = async (req, res, next) => {
   }
 }
 
-const resetPassword = async (req, res, next) => {
+const resetPassword = async (req,res, next) => {
+  // Compare token in URL params to hashed token
   const resetPasswordToken = crypto
     .createHash("sha256")
     .update(req.params.resetToken)
     .digest("hex");
-  
-    try {
-      const user = await User.findOne({
-        resetPasswordToken,
-        resetPasswordExpire: { $gt: Date.now() },
+
+  try {
+    const user = await User.findOne({
+      resetPasswordToken,
+      resetPasswordExpire: { $gt: Date.now() },
+    });
+
+    if(!user){
+      return res.status(400).json({ 
+        success: false, 
+        message: "Invalid token"
       });
-  
-      if (!user) {
-        return res.status(400).json({error :"Invalid Token"});
-      }
-  
-      // user.password = req.body.password;
-      const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(req.body.password, salt);
-      user.resetPasswordToken = undefined;
-      user.resetPasswordExpire = undefined;
-    
-      await user.save();
-  
-      res.status(201).json({
-        success: true,
-        data: "Password Updated Success",
-      });
-    } catch (err) {
-      next(err);
     }
+
+    user.password = req.body.password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Password updated success",
+      token: user.getSignedJwtToken(),
+    })
+  }
+  catch(err){
+    next(err);
+  }
+  
 }
- 
+
+const getProfile = async(req, res, next) => {
+  User.findById(req.user.id)
+    .select('-password')
+    .then(user => res.status(200).json(user))
+    .catch(err => res.status(404).json({error: 'profile not found'}))
+}
+
 module.exports = {
-  registerUser,
-  loginUser,
-  getProfile,
+  register,
+  login,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  getProfile
 }

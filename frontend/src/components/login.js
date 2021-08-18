@@ -28,9 +28,7 @@ const Login = (props) => {
     AuthService.login(userData)
       .then(res => {
         alert('Login successfully')
-        // console.log(res.data)
-        localStorage.setItem('user', JSON.stringify(res.data))
-        
+        localStorage.setItem('token', res.data.token);
         props.history.push('/courses')
         window.location.reload()
       })
@@ -42,35 +40,35 @@ const Login = (props) => {
   }
 
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col-md-4 offset-md-4">
-          <div className="bg-light mt-4 p-4">
-            <form action="" className="row g-3">
-              <h4>歡迎回來</h4>
-              <div className="col-12">
-                <input type="text" name="email" value={loginInfo.email} onChange={handleChange} className="form-control" placeholder="輸入信箱"></input>
-              </div >
-              <div className="col-12">
-                
-                <input type="password" name="password" value={loginInfo.password} onChange={handleChange} className="form-control" placeholder="輸入密碼"></input>
-              </div>
-              <div className="col-12">
-                <button type="submit" className="btn btn-dark float-end" onClick={handleLogin}>登入</button>
-              </div>
-              
-            </form>
-            <hr/>
+    
+    <div className="row">
+      <div className="col col-md-6 offset-md-3">
+        <div className="bg-light mt-4 p-4">
+          <form action="" className="row g-3">
+            <h4>歡迎回來</h4>
             <div className="col-12">
-              <p className="mb-1 text-center">還沒有帳戶嗎?<Link to="/register">註冊</Link></p>
+              <input type="text" name="email" value={loginInfo.email} onChange={handleChange} className="form-control" placeholder="輸入信箱"></input>
+            </div >
+            <div className="col-12">
+              
+              <input type="password" name="password" value={loginInfo.password} onChange={handleChange} className="form-control" placeholder="輸入密碼"></input>
             </div>
-            <div className="col-12 text-center">
-              <Link to="/forgotPassword">忘記密碼</Link>
+            <div className="col-12">
+              <button type="submit" className="btn btn-dark float-end" onClick={handleLogin}>登入</button>
             </div>
-          </div>   
-        </div>
-      </div>   
-    </div>
+            
+          </form>
+          <hr/>
+          <div className="col-12">
+            <p className="mb-1 text-center">還沒有帳戶嗎?<Link to="/register">註冊</Link></p>
+          </div>
+          <div className="col-12 text-center">
+            <Link to="/forgotPassword">忘記密碼</Link>
+          </div>
+        </div>   
+      </div>
+    </div>   
+    
   )
 }
 

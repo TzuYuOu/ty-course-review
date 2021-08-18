@@ -34,7 +34,7 @@ const MyReview = () => {
                   <p>{review.review}</p>
                   
                   <Link to={{
-                    pathname: "/courses/" + review.course + "/review",
+                    pathname: `/courses/${review.course._id}/review`,
                     state: {
                       currentReview: review
                     }

@@ -2,23 +2,23 @@ import axios from 'axios';
 
 class ReviewService {
   http = axios.create({
-    baseURL: `/api/reviews`,
+    baseURL: `http://localhost:5000/api/reviews`,
     headers: {
-      "Content-type": "application/json"
+      "Content-type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`
     }
   })
 
   createReivew(data){
-    return this.http.post("/",data);
+    return this.http.post("/", data);
   }
 
   getUserReview(){
-    const user = JSON.parse(localStorage.getItem("user"));
-    return this.http.get("/user", {headers: {'x-auth-token': user.token}});
+    return this.http.get("/user");
   }
 
   updateReview(data){
-    return this.http.put("/",data);
+    return this.http.put("/", data);
   }
 
   

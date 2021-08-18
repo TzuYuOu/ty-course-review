@@ -1,10 +1,16 @@
-const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
 
-dotenv.config();
-
 function auth(req, res, next){
-  const token = req.header('x-auth-token');
+  
+  let token;
+
+  // Get token from authorization
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  }
 
   // Check for token
   if(!token){

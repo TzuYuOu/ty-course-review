@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import reviewService from '../services/review-service';
-import authSevice from '../services/auth-service';
-
 
 const AddReview = (props) => {
 
 	let initialReviewState = "";
 	let editing = false;
-	const user = authSevice.getCurrentUser();
+	// const user = authSevice.getCurrentUser();
 	
 	if (props.location.state && props.location.state.currentReview) {
     editing = true;
@@ -25,7 +23,7 @@ const AddReview = (props) => {
 	const saveReview = () =>{
 		let data  = {
 			courseId: props.match.params.id,
-			userId: user.userId,
+			// userId: user.userId,
 			review: review,
 		};
 

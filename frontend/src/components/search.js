@@ -38,12 +38,12 @@ const Search = ({courses}) => {
           onChange={(e) => updateInput(e.target.value)}
         />
         
-        <ul className="list-group mt-1 ">
+        <ul className="filtered-list mt-1 ">
         {
           coursesFiltered.length > 0 && text ? (
             coursesFiltered.map((course, index) => {
               return (
-                <li className="search-item list-group-item"  onClick={() => courseClick(course._id)} key={index}>
+                <li className="filtered-item"  onClick={() => courseClick(course._id)} key={index}>
                   {course.courseId} {course.name}
                 </li>
               )
