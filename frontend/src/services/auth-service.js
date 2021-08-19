@@ -20,6 +20,10 @@ class AuthService {
     return this.http.get('/profile', { headers: { Authorization: `Bearer ${localStorage.getItem("token")}`}});
   }
 
+  updateProfile(data){
+    return this.http.put('/profile', data, { headers: { Authorization: `Bearer ${localStorage.getItem("token")}`}});
+  }
+
   forgotPassword(data){
     return this.http.post('/forgotPassword', data);
   }

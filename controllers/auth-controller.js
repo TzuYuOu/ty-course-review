@@ -151,10 +151,40 @@ const getProfile = async(req, res, next) => {
     .catch(err => res.status(404).json({error: 'profile not found'}))
 }
 
+const updateProfile = async(req, res, next) => {
+  const { name, email } = req.body;
+
+  // Check if name and email are provided
+  if(!name || !email){
+    return res.status(400).json({message: "Please provide a name and email!"})
+  }
+
+  try{
+    // Check that user exists by email
+    const user = await User.findOne({ email });
+
+    if(!user){
+      return res.status(401).json({message: "Invalid credentials!"})
+    }
+
+    const updateDoc = await User.findOneAndUpdate(
+      { email: email},
+      { name: name},
+      { new: true}
+    )
+    res.status(200).json({message: "Update success!"});  
+    
+  }
+  catch(err){
+    next(err);
+  }
+}
+
 module.exports = {
   register,
   login,
   forgotPassword,
   resetPassword,
-  getProfile
+  getProfile,
+  updateProfile
 }
